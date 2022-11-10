@@ -14,7 +14,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
-import { isCPF, isCEP } from "brazilian-values"
+import { isCPF, isCEP } from 'brazilian-values';
 
 function Register() {
 	const route = useNavigate();
@@ -42,40 +42,42 @@ function Register() {
 			email: Yup.string()
 				.email('Email está no formato invalido')
 				.required('Campo obrigatório'),
-			cpf: Yup.string().required('Campo obrigatório').test("cpf","CPF é inválido", (value) => {
-				return isCPF(value)
-			}),
+			cpf: Yup.string()
+				.required('Campo obrigatório')
+				.test('cpf', 'CPF é inválido', (value) => {
+					return isCPF(value);
+				}),
 			profession: Yup.string().required('Campo obrigatório'),
 			concil: Yup.string().required('Campo obrigatório'),
 			state: Yup.string().required('Campo obrigatório'),
-			cep: Yup.string().required('Campo obrigatório').test("cep","isCEP é inválido", (value) => {
-				return isCEP(value)
-			}),
+			cep: Yup.string()
+				.required('Campo obrigatório')
+				.test('cep', 'isCEP é inválido', (value) => {
+					return isCEP(value);
+				}),
 			street: Yup.string().required('Campo obrigatório'),
 			number: Yup.string().required('Campo obrigatório'),
 			complement: Yup.string(),
-			password: Yup.string().required('Necessário a utilização de senha'),
-			passwordConfirmation: Yup.string().required('Necessário repetir a senha'),
 			city: Yup.string().required('Campo obrigatório'),
 			district: Yup.string().required('Campo obrigatório'),
 			register: Yup.string().required('Campo obrigatório'),
+			password: Yup.string().required('Necessário a utilização de senha'),
+			passwordConfirmation: Yup.string().required('Necessário repetir a senha'),
 		}),
 		onSubmit: async (values) => {
 			console.log(values);
 			try {
-				// route('/logged');
+				route('/logged');
 			} catch (e) {
 				formik.setErrors(e);
 			}
 		},
 	});
 
-	const [loading, setLoading] = React.useState(false);
-
 	const check = async (e) => {
-		setLoading(true)
-		const data = await fetch(`https://viacep.com.br/ws/${e.target.value.replace(/\D/g, '')}/json/`)
-			.then((res) => res.json())
+		const data = await fetch(
+			`https://viacep.com.br/ws/${e.target.value.replace(/\D/g, '')}/json/`,
+		).then((res) => res.json());
 
 		formik.setValues({
 			...formik.values,
@@ -85,11 +87,7 @@ function Register() {
 			street: data?.logradouro,
 			state: data?.uf,
 		});
-
-		setLoading(false)
 	};
-
-	if(loading) return "carregando..."
 
 	return (
 		<Layout>
@@ -148,7 +146,9 @@ function Register() {
 										bg="white"
 										placeholder="CPF"
 										name="cpf"
-										onChange={e => formik.setFieldValue("cpf", e.target.value)}
+										onChange={(e) =>
+											formik.setFieldValue('cpf', e.target.value.replace(/\D/g, ''))
+										}
 										value={formik.values.cpf}
 									/>
 									{
@@ -197,7 +197,9 @@ function Register() {
 										bg="white"
 										placeholder="Conselho"
 										name="concil"
-										onChange={e => formik.setFieldValue('concil', e.target.value)}
+										onChange={(e) =>
+											formik.setFieldValue('concil', e.target.value)
+										}
 										value={formik.values.concil}
 									>
 										<option value="crn1">CRN-1</option>
@@ -223,7 +225,9 @@ function Register() {
 										bg="white"
 										placeholder="Nº do registro"
 										name="register"
-										onChange={e => formik.setFieldValue('register', e.target.value)}
+										onChange={(e) =>
+											formik.setFieldValue('register', e.target.value)
+										}
 										value={formik.values.register}
 									/>
 									{
@@ -253,7 +257,9 @@ function Register() {
 										bg="white"
 										placeholder="CEP"
 										name="cep"
-										onChange={e => formik.setFieldValue('cep', e.target.value)}
+										onChange={(e) =>
+											formik.setFieldValue('cep', e.target.value)
+										}
 										value={formik.values.cep}
 									/>
 									{
@@ -272,7 +278,9 @@ function Register() {
 										bg="white"
 										placeholder="Estado"
 										name="state"
-										onChange={e => formik.setFieldValue('state', e.target.value)}
+										onChange={(e) =>
+											formik.setFieldValue('state', e.target.value)
+										}
 										value={formik.values.state}
 									/>
 									{
@@ -300,8 +308,9 @@ function Register() {
 										bg="white"
 										placeholder="Cidade"
 										name="city"
-										onChange={e => formik.setFieldValue('city', e.target.value)}
-										
+										onChange={(e) =>
+											formik.setFieldValue('city', e.target.value)
+										}
 										value={formik.values.city}
 									/>
 									{
@@ -320,7 +329,9 @@ function Register() {
 										bg="white"
 										placeholder="Bairro"
 										name="district"
-										onChange={e => formik.setFieldValue('district', e.target.value)}
+										onChange={(e) =>
+											formik.setFieldValue('district', e.target.value)
+										}
 										value={formik.values.district}
 									/>
 									{
@@ -344,7 +355,9 @@ function Register() {
 									bg="white"
 									placeholder="Rua"
 									name="street"
-									onChange={e => formik.setFieldValue('street', e.target.value)}
+									onChange={(e) =>
+										formik.setFieldValue('street', e.target.value)
+									}
 									value={formik.values.street}
 								/>
 								{
@@ -368,7 +381,9 @@ function Register() {
 										bg="white"
 										placeholder="Numero"
 										name="number"
-										onChange={e => formik.setFieldValue('number', e.target.value)}
+										onChange={(e) =>
+											formik.setFieldValue('number', e.target.value)
+										}
 										value={formik.values.number}
 									/>
 									{formik.errors.number ? (
@@ -384,7 +399,9 @@ function Register() {
 										bg="white"
 										placeholder="Complemento"
 										name="complement"
-										onChange={e => formik.setFieldValue('complement', e.target.value)}
+										onChange={(e) =>
+											formik.setFieldValue('complement', e.target.value)
+										}
 										value={formik.values.complement}
 									/>
 									{
@@ -412,7 +429,9 @@ function Register() {
 										bg="white"
 										placeholder="Senha"
 										name="password"
-										onChange={e => formik.setFieldValue('password', e.target.value)}
+										onChange={(e) =>
+											formik.setFieldValue('password', e.target.value)
+										}
 										value={formik.values.password}
 									/>
 									{
@@ -437,7 +456,12 @@ function Register() {
 										bg="white"
 										placeholder="Repetir senha"
 										name="passwordConfirmation"
-										onChange={e => formik.setFieldValue('passwordConfirmation', e.target.value)}
+										onChange={(e) =>
+											formik.setFieldValue(
+												'passwordConfirmation',
+												e.target.value,
+											)
+										}
 										value={formik.values.passwordConfirmation}
 									/>
 									{
